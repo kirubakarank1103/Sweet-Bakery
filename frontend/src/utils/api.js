@@ -1,10 +1,8 @@
 // ─── Axios API Instance ──────────────────────────────────────────
-// All API calls go through this instance.
-// It automatically attaches the JWT token from localStorage.
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://sweet-venom-backend.onrender.com/api',
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -23,7 +21,6 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token expired → clear storage and reload
       localStorage.removeItem('sv_token');
       localStorage.removeItem('sv_user');
       window.location.href = '/login';
